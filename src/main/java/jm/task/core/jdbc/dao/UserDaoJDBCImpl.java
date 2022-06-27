@@ -2,6 +2,8 @@ package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
+
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,59 +21,120 @@ public class UserDaoJDBCImpl implements UserDao {
     private static final String SAVE_USER_SQL = "INSERT INTO user (name, lastname, age) VALUES (?, ?, ?)";
     private static final String CLEAN_USERS_TABLE_SQL = "TRUNCATE TABLE user";
     private static final String GET_ALL_USERS_SQL = "SELECT id, name, lastname, age FROM user";
+    private Connection connection = null;
 
     public UserDaoJDBCImpl() {
 
     }
 
     public void createUsersTable() {
-        try (var connection = Util.getConnection();
-             var statement = connection.createStatement()) {
+        try {
+            var connection = Util.getConnection();
+            var statement = connection.createStatement();
 
             statement.execute(CREATE_TABLE_SQL);
+            connection.commit();
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
     }
 
     public void dropUsersTable() {
-        try (var connection = Util.getConnection();
-             var statement = connection.createStatement()) {
-
+        try {
+            connection = Util.getConnection();
+            var statement = connection.createStatement();
             statement.execute(DROP_TABLE_SQL);
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            connection.commit();
+        } catch (Exception e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        try (var connection = Util.getConnection();
-             var preparedStatement = connection.prepareStatement(SAVE_USER_SQL)) {
-
+        try {
+            connection = Util.getConnection();
+            var preparedStatement = connection.prepareStatement(SAVE_USER_SQL);
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
             preparedStatement.setByte(3, age);
             preparedStatement.executeUpdate();
             System.out.println("User с именем - " + name + " добавлен в базу данных");
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            connection.commit();
+        } catch (Exception e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
     }
+
 
     public void removeUserById(long id) {
-        try (var connection = Util.getConnection();
-             var preparedStatement = connection.prepareStatement(REMOVE_USER_BY_ID_SQL)) {
-
+        try {
+            connection = Util.getConnection();
+            var preparedStatement = connection.prepareStatement(REMOVE_USER_BY_ID_SQL);
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            connection.commit();
+        } catch (Exception e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
     }
+
 
     public List<User> getAllUsers() {
         try (var connection = Util.getConnection();
@@ -94,13 +157,29 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-        try (var connection = Util.getConnection();
-             var statement = connection.createStatement()) {
+        try {
+            connection = Util.getConnection();
+            var statement = connection.createStatement();
 
             statement.execute(CLEAN_USERS_TABLE_SQL);
+            connection.commit();
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
     }
 }
