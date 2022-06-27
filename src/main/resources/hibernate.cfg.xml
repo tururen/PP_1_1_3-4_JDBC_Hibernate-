@@ -1,0 +1,19 @@
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<!DOCTYPE hibernate-configuration PUBLIC-->
+<!--        "-//Hibernate/Hibernate Configuration DTD 5.3//EN"-->
+<!--        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">-->
+<!--<hibernate-configuration>-->
+<!--    <session-factory>-->
+
+<!--        <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>-->
+<!--        <property name="connection.url">jdbc:mysql://192.168.1.12:3306/taskdb</property>-->
+<!--        <property name="connection.username">db_admin</property>-->
+<!--        <property name="connection.password">Db123456789</property>-->
+<!--        <property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>-->
+<!--        <property name="hbm2ddl.auto">update</property>-->
+<!--        <property name="show_sql">true</property>-->
+
+<!--        <mapping class="jm.task.core.jdbc.model.User"></mapping>-->
+
+<!--    </session-factory>-->
+<!--</hibernate-configuration>-->
