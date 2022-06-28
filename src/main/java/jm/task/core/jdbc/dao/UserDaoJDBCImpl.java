@@ -5,6 +5,7 @@ import jm.task.core.jdbc.util.Util;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import static jm.task.core.jdbc.util.Util.*;
 
 public class UserDaoJDBCImpl implements UserDao {
 
