@@ -8,6 +8,7 @@ public class Util {
     private static final String URL = "jdbc:mysql://192.168.1.12:3306/taskdb";
     private static final String USER = "db_admin";
     private static final String PASSWD = "Db123456789";
+    private static Connection connection = null;
 
     static {
         loadDriver();
@@ -26,11 +27,21 @@ public class Util {
 
     public static Connection getConnection() {
         try {
-            Connection connection = DriverManager.getConnection(URL, USER, PASSWD);
+            connection = DriverManager.getConnection(URL, USER, PASSWD);
             connection.setAutoCommit(false);
             return connection;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static void connectionRollback() {
+        if (connection != null) {
+            try {
+                connection.rollback();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }
